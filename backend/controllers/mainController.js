@@ -27,7 +27,6 @@ export const addItem = (req, res) => {
   res.json({ success: true, id: newId });
 };
 
-
 // editing Topic , SubTopic , Question
 export const updateItem = (req, res) => {
   const { type, id, title, link, difficulty } = req.body;
@@ -49,25 +48,50 @@ export const updateItem = (req, res) => {
   res.json({ success: true });
 };
 
-// deleting Topic , SubTopic , Question
+// deleting Topic , SubTopic , Question -- cascade delete system
 export const deleteItem = (req, res) => {
   const { type, id, parentId } = req.body;
   const db = get();
 
-  if (type === 'topic') {
+  if (type === 'topic' && db.topics[id]) {
+    const subTopicIds = db.topics[id].subTopicOrder || [];
+
+    subTopicIds.forEach(subId => {
+      const questionIds = db.subTopics[subId]?.questionOrder || [];
+
+      questionIds.forEach(qid => {
+        delete db.questions[qid];
+      });
+
+      delete db.subTopics[subId];
+    });
+
     db.sheet.topicOrder = db.sheet.topicOrder.filter(tid => tid !== id);
+
     delete db.topics[id];
-  } 
-  else if (type === 'subTopic') {
+  }
+
+  else if (type === 'subTopic' && db.subTopics[id]) {
+    const questionIds = db.subTopics[id].questionOrder || [];
+
+    questionIds.forEach(qid => {
+      delete db.questions[qid];
+    });
+
     if (db.topics[parentId]) {
-      db.topics[parentId].subTopicOrder = db.topics[parentId].subTopicOrder.filter(sid => sid !== id);
+      db.topics[parentId].subTopicOrder =
+        db.topics[parentId].subTopicOrder.filter(sid => sid !== id);
     }
+
     delete db.subTopics[id];
-  } 
-  else if (type === 'question') {
+  }
+
+  else if (type === 'question' && db.questions[id]) {
     if (db.subTopics[parentId]) {
-      db.subTopics[parentId].questionOrder = db.subTopics[parentId].questionOrder.filter(qid => qid !== id);
+      db.subTopics[parentId].questionOrder =
+        db.subTopics[parentId].questionOrder.filter(qid => qid !== id);
     }
+
     delete db.questions[id];
   }
 

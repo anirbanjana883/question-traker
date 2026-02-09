@@ -1,7 +1,7 @@
 # 🚀 Prep Flow  
 ### Structured interview prep, reimagined.
 
-**Prep Flow** is a high-performance, interactive DSA tracking platform inspired by **Take U Forward (Striver)**.  
+**Prep Flow** is a high-performance, interactive DSA tracking platform .  
 It provides a clean, intuitive single-page experience for managing large interview preparation sheets with smooth drag-and-drop reordering, hierarchical organization, and modern UX optimizations.
 
 ---
