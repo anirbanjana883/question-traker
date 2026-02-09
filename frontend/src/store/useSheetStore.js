@@ -77,19 +77,16 @@ export const useSheetStore = create((set, get) => ({
 
   // OPTIMIZED REORDER LOGIC
   reorderItem: async (type, sourceParentId, destParentId, sourceIndex, destIndex) => {
-    // 1. Optimistic Update
     set((state) => {
-        // Deep clone is expensive, so we just clone the specific arrays we need
         const newState = { ...state }; 
         let sourceList, destList;
 
         if (type === 'topic') {
             newState.sheet = { ...state.sheet, topicOrder: [...state.sheet.topicOrder] };
             sourceList = newState.sheet.topicOrder;
-            destList = newState.sheet.topicOrder; // Same list for topics
+            destList = newState.sheet.topicOrder; 
         } 
         else if (type === 'subTopic') {
-             // Clone the specific topic objects involved
              newState.topics = { ...state.topics };
              newState.topics[sourceParentId] = { ...state.topics[sourceParentId], subTopicOrder: [...state.topics[sourceParentId].subTopicOrder] };
              if (sourceParentId !== destParentId) {
@@ -115,12 +112,23 @@ export const useSheetStore = create((set, get) => ({
         return newState;
     });
 
-    // 2. Persist
     try {
       await apiClient.put('/reorder', { type, sourceParentId, destParentId, sourceIndex, destIndex });
     } catch (e) {
       console.error(e);
-      get().fetchSheet(); // Revert on failure
+      get().fetchSheet();
+    }
+  },
+
+  resetSheet: async () => {
+    try {
+      set({ isLoading: true });
+      await apiClient.post('/reset');
+      const res = await apiClient.get('/sheet');
+      set({ ...res.data.data, isLoading: false });
+    } catch (err) {
+      console.error(err);
+      set({ isLoading: false });
     }
   },
 

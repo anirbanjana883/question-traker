@@ -3,20 +3,20 @@
     "id": "66e772e7b100b67bc51e5b44",
     "title": "Strivers A2Z DSA Sheet",
     "topicOrder": [
-      "topic-7",
       "topic-1",
+      "topic-2",
       "topic-3",
       "topic-4",
       "topic-5",
-      "topic-8",
-      "topic-10",
-      "topic-9",
       "topic-6",
-      "topic-2",
+      "topic-7",
+      "topic-8",
+      "topic-9",
+      "topic-10",
       "topic-11",
-      "topic-14",
       "topic-12",
       "topic-13",
+      "topic-14",
       "topic-15",
       "topic-16",
       "topic-17",
@@ -28,10 +28,10 @@
       "id": "topic-1",
       "title": "Learn the basics",
       "subTopicOrder": [
-        "sub-4",
+        "sub-1",
         "sub-2",
         "sub-3",
-        "sub-1"
+        "sub-4"
       ]
     },
     "topic-2": {
@@ -44,7 +44,7 @@
     },
     "topic-3": {
       "id": "topic-3",
-      "title": "Solve Problems on Arrays [Easy -> Medium -> Hard].",
+      "title": "Solve Problems on Arrays [Easy -> Medium -> Hard]",
       "subTopicOrder": [
         "sub-7",
         "sub-8",
@@ -72,9 +72,9 @@
       "id": "topic-6",
       "title": "Learn LinkedList [Single LL, Double LL, Medium, Hard Problems]",
       "subTopicOrder": [
+        "sub-15",
         "sub-16",
         "sub-17",
-        "sub-15",
         "sub-18",
         "sub-19"
       ]
@@ -255,10 +255,10 @@
       "id": "sub-6",
       "title": "Sorting-II",
       "questionOrder": [
-        "q-66e77358b100b67bc51e5bc7",
-        "q-66e77358b100b67bc51e5bcb",
         "q-66e77358b100b67bc51e5bbf",
-        "q-66e77358b100b67bc51e5bc3"
+        "q-66e77358b100b67bc51e5bc3",
+        "q-66e77358b100b67bc51e5bc7",
+        "q-66e77358b100b67bc51e5bcb"
       ]
     },
     "sub-7": {
@@ -325,8 +325,8 @@
       "questionOrder": [
         "q-66e77359b100b67bc51e5c6f",
         "q-66e77359b100b67bc51e5c73",
-        "q-66e77359b100b67bc51e5c7b",
         "q-66e77359b100b67bc51e5c77",
+        "q-66e77359b100b67bc51e5c7b",
         "q-66e77359b100b67bc51e5c7f",
         "q-66e77359b100b67bc51e5c83",
         "q-66e77359b100b67bc51e5c87",
@@ -344,9 +344,9 @@
       "questionOrder": [
         "q-66e77359b100b67bc51e5ca3",
         "q-66e77359b100b67bc51e5ca7",
+        "q-66e77359b100b67bc51e5cab",
         "q-66e77359b100b67bc51e5caf",
         "q-66e77359b100b67bc51e5cb3",
-        "q-66e77359b100b67bc51e5cab",
         "q-66e77359b100b67bc51e5cb7",
         "q-66e77359b100b67bc51e5cbb",
         "q-66e77359b100b67bc51e5cbf",
@@ -540,14 +540,14 @@
       "id": "sub-26",
       "title": "Learning",
       "questionOrder": [
-        "q-66e7735ab100b67bc51e5e5b",
-        "q-66e7735ab100b67bc51e5e57",
         "q-66e7735ab100b67bc51e5e53",
-        "q-66e7735ab100b67bc51e5e6f",
-        "q-66e7735ab100b67bc51e5e6b",
+        "q-66e7735ab100b67bc51e5e57",
+        "q-66e7735ab100b67bc51e5e5b",
         "q-66e7735ab100b67bc51e5e5f",
         "q-66e7735ab100b67bc51e5e63",
-        "q-66e7735ab100b67bc51e5e67"
+        "q-66e7735ab100b67bc51e5e67",
+        "q-66e7735ab100b67bc51e5e6b",
+        "q-66e7735ab100b67bc51e5e6f"
       ]
     },
     "sub-27": {
@@ -664,12 +664,12 @@
       "id": "sub-36",
       "title": "Medium/Hard",
       "questionOrder": [
-        "q-66e7735ab100b67bc51e5f64",
         "q-66e7735ab100b67bc51e5f50",
-        "q-66e7735ab100b67bc51e5f60",
-        "q-66e7735ab100b67bc51e5f5c",
         "q-66e7735ab100b67bc51e5f54",
         "q-66e7735ab100b67bc51e5f58",
+        "q-66e7735ab100b67bc51e5f5c",
+        "q-66e7735ab100b67bc51e5f60",
+        "q-66e7735ab100b67bc51e5f64",
         "q-66e7735ab100b67bc51e5f68",
         "q-66e7735ab100b67bc51e5f6c",
         "q-66e7735ab100b67bc51e5f70",
@@ -1217,7 +1217,7 @@
     },
     "q-66e77358b100b67bc51e5bcf": {
       "id": "q-66e77358b100b67bc51e5bcf",
-      "title": "Largest Element in an Array.",
+      "title": "Largest Element in an Array",
       "link": "https://www.geeksforgeeks.org/problems/largest-element-in-array4009/1",
       "difficulty": "Basic",
       "isPinned": false
@@ -1238,7 +1238,7 @@
     },
     "q-66e77358b100b67bc51e5bdb": {
       "id": "q-66e77358b100b67bc51e5bdb",
-      "title": "Remove duplicates from Sorted array.",
+      "title": "Remove duplicates from Sorted array",
       "link": "https://leetcode.com/problems/remove-duplicates-from-sorted-array",
       "difficulty": "Easy",
       "isPinned": false
@@ -2337,7 +2337,7 @@
     },
     "q-66e7735ab100b67bc51e5e53": {
       "id": "q-66e7735ab100b67bc51e5e53",
-      "title": "Implement Stack using Arrays.",
+      "title": "Implement Stack using Arrays",
       "link": "https://www.geeksforgeeks.org/problems/implement-stack-using-array/1",
       "difficulty": "Basic",
       "isPinned": false

@@ -1,5 +1,12 @@
-import { get, save } from '../store/store.js';
+import { get, save, set } from '../store/store.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SOURCE_FILE = path.join(__dirname, '../scripts/sheet.json');
 
 // getting the fulll sheet details
 export const getSheet = (req, res) => {
@@ -109,5 +116,79 @@ export const togglePin = (req, res) => {
     res.json({ success: true });
   } else {
     res.status(404).json({ error: "Not found" });
+  }
+};
+
+// reset all the changes
+export const resetData = (req, res) => {
+  try {
+    if (!fs.existsSync(SOURCE_FILE)) {
+      return res.status(500).json({ error: "Source file not found" });
+    }
+
+    const rawData = JSON.parse(fs.readFileSync(SOURCE_FILE, 'utf-8'));
+    const sheetInfo = rawData.data.sheet;
+    const questionsList = rawData.data.questions;
+
+    // Rebuild clean state
+    const db = {
+      sheet: {
+        id: sheetInfo._id || "sheet-1",
+        title: sheetInfo.name || "Striver's Sheet",
+        topicOrder: []
+      },
+      topics: {},
+      subTopics: {},
+      questions: {}
+    };
+
+    const topicMap = {}; 
+    const subTopicMap = {}; 
+
+    questionsList.forEach((item) => {
+      const topicName = item.topic || "Uncategorized";
+      const subTopicName = item.subTopic || "General Problems";
+      
+      // Topic
+      if (!topicMap[topicName]) {
+        const newTopicId = `topic-${Object.keys(topicMap).length + 1}`;
+        topicMap[topicName] = newTopicId;
+        db.topics[newTopicId] = { id: newTopicId, title: topicName, subTopicOrder: [] };
+        db.sheet.topicOrder.push(newTopicId);
+      }
+      const topicId = topicMap[topicName];
+
+      // SubTopic
+      const subKey = `${topicName}:${subTopicName}`;
+      if (!subTopicMap[subKey]) {
+        const newSubId = `sub-${Object.keys(subTopicMap).length + 1}`;
+        subTopicMap[subKey] = newSubId;
+        db.subTopics[newSubId] = { id: newSubId, title: subTopicName, questionOrder: [] };
+        db.topics[topicId].subTopicOrder.push(newSubId);
+      }
+      const subTopicId = subTopicMap[subKey];
+
+      // Question
+      let rawId = item._id || uuidv4();
+      const qId = rawId.startsWith('q-') ? rawId : `q-${rawId}`;
+      const qData = item.questionId || {};
+
+      db.questions[qId] = {
+        id: qId,
+        title: item.title || qData.name || "Unknown Question",
+        link: qData.problemUrl || "#",
+        difficulty: qData.difficulty || "Medium",
+        isPinned: false
+      };
+      db.subTopics[subTopicId].questionOrder.push(qId);
+    });
+
+    // Overwrite Database
+    set(db);
+
+    res.json({ success: true, message: "Sheet reset to default successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to reset data" });
   }
 };
