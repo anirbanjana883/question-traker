@@ -6,10 +6,8 @@ It provides a clean, intuitive single-page experience for managing large intervi
 
 ---
 
----
-
 > ⚠️WARNING⚠️
-
+>
 > **IMPORTANT ARCHITECTURE NOTICE: Data Persistence**
 >
 > **This application is currently running in "Demo Mode" using an Ephemeral File System.**
