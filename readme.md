@@ -57,8 +57,10 @@ All destructive actions include safety confirmations.
 - Pinned items are visually highlighted
 - Pinned questions are locked from dragging to preserve priority
 
-### 🎨 TUF-Inspired Aesthetic
-Custom Tailwind configuration inspired by the **Striver / TakeUForward** red-and-black dark theme, while maintaining original design decisions.
+### 🔄 Factory Reset
+- A "Panic Button" to instantly wipe all custom changes.
+- Restores the original Striver SDE Sheet data.
+- Includes a safety confirmation modal to prevent accidents.
 
 ---
 
@@ -230,6 +232,13 @@ Endpoint: `PUT /reorder`
   "destIndex": 5
 }
 ```
+
+**7. Factory Reset**
+
+Resets the entire database to the original seed file.
+
+Endpoint: `POST /reset`
+
 ## 🏗 Architecture & Optimizations
 
 **1️⃣ Normalized State (Zustand)**
