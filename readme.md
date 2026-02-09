@@ -6,11 +6,24 @@ It provides a clean, intuitive single-page experience for managing large intervi
 
 ---
 
-> **⚠️ DEMO NOTICE:**
-> This application uses a **file-system based JSON store** for simplicity and portability.
-> On free hosting platforms (like Render/Vercel), the file system is ephemeral.
-> **Your data will reset to the original state periodically (approx. every 24 hours).**
-> For permanent storage, connect a MongoDB database.
+---
+
+> ⚠️WARNING⚠️
+
+> **IMPORTANT ARCHITECTURE NOTICE: Data Persistence**
+>
+> **This application is currently running in "Demo Mode" using an Ephemeral File System.**
+>
+> To keep this project lightweight and portable for demonstration, I am using a **local JSON file (`data.json`)** as the database instead of a cloud database like MongoDB.
+>
+> **What this means for you:**
+> 1. **Data is Temporary:** Free hosting platforms (like Render) spin down servers after 15 minutes of inactivity to save resources.
+> 2. **Automatic Resets:** When the server "wakes up" again, the file system is wiped, and the data **resets to the original default state**.
+> 3. **Not a Bug:** This is expected behavior for file-system storage on serverless/containerized platforms.
+>
+> *💡 **Note:** To test data persistence fully, please clone the repo and run it locally.*
+
+---
 
 ## 📋 Table of Contents
 - 🌟 Key Features  
