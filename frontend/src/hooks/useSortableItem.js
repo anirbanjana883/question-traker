@@ -18,7 +18,6 @@ export function useSortableItem(id, disabled = false) {
     transition: isDragging ? undefined : transition, 
     opacity: isDragging ? 0.4 : 1,
     zIndex: isDragging ? 999 : 'auto',
-    // Hardware acceleration hint
     willChange: isDragging ? 'transform' : 'auto',
   };
 

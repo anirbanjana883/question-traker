@@ -16,14 +16,11 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
   const togglePin = useSheetStore(state => state.togglePin);
   const updateItem = useSheetStore(state => state.updateItem);
 
-  // Modal States
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
-  // Form State
   const [editForm, setEditForm] = useState({ title: '', link: '', difficulty: 'Medium' });
 
-  // If Overlay, use dummy refs. If real, use the hook.
   const { attributes, listeners, setNodeRef, style, isDragging } = overlay 
     ? { attributes: {}, listeners: {}, setNodeRef: null, style: {}, isDragging: false }
     : useSortableItem(id, isPinnedSection);

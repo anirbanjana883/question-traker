@@ -14,12 +14,10 @@ const TopicItem = ({ id, overlay = false }) => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Modal States
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddSubModalOpen, setIsAddSubModalOpen] = useState(false);
   
-  // Form States
   const [editTitle, setEditTitle] = useState(topic?.title || '');
   const [newSubTopicTitle, setNewSubTopicTitle] = useState('');
 
@@ -29,7 +27,6 @@ const TopicItem = ({ id, overlay = false }) => {
 
   if (!topic) return null;
 
-  // --- HANDLERS ---
   const handleUpdate = (e) => {
     e.preventDefault();
     if (editTitle.trim()) {
@@ -121,7 +118,6 @@ const TopicItem = ({ id, overlay = false }) => {
 
       {/* --- MODALS --- */}
       
-      {/* 1. Edit Modal */}
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Rename Topic">
         <form onSubmit={handleUpdate} className="flex flex-col gap-4">
           <input 
@@ -138,7 +134,6 @@ const TopicItem = ({ id, overlay = false }) => {
         </form>
       </Modal>
 
-      {/* 2. Delete Confirmation Modal */}
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Topic?">
         <p className="text-tuf-muted mb-6">
           Are you sure you want to delete <strong>"{topic.title}"</strong>? This will delete all sub-topics and questions inside it. This action cannot be undone.
@@ -149,7 +144,6 @@ const TopicItem = ({ id, overlay = false }) => {
         </div>
       </Modal>
 
-      {/* 3. Add SubTopic Modal */}
       <Modal isOpen={isAddSubModalOpen} onClose={() => setIsAddSubModalOpen(false)} title="Add Sub-Topic">
         <form onSubmit={handleAddSubTopic} className="flex flex-col gap-4">
           <input 

@@ -4,7 +4,6 @@ import { X } from 'lucide-react';
 const Modal = ({ isOpen, onClose, title, children }) => {
   const modalRef = useRef(null);
 
-  // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -15,7 +14,6 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Close on click outside
   const handleBackdropClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       onClose();

@@ -34,7 +34,6 @@ const SubTopicItem = ({ id, overlay = false }) => {
   const pinnedIds = questionIds.filter(qid => questions[qid]?.isPinned);
   const unpinnedIds = questionIds.filter(qid => !questions[qid]?.isPinned);
 
-  // --- HANDLERS ---
   const handleUpdate = (e) => {
     e.preventDefault();
     if (editTitle.trim()) {
@@ -114,7 +113,6 @@ const SubTopicItem = ({ id, overlay = false }) => {
 
       {/* --- MODALS --- */}
 
-      {/* 1. Edit Modal */}
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Rename Sub-Topic">
         <form onSubmit={handleUpdate} className="flex flex-col gap-4">
           <input 
@@ -131,7 +129,6 @@ const SubTopicItem = ({ id, overlay = false }) => {
         </form>
       </Modal>
 
-      {/* 2. Delete Confirmation */}
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Sub-Topic?">
         <p className="text-tuf-muted mb-6">
           Are you sure you want to delete <strong>"{subTopic.title}"</strong>? This will delete all {subTopic.questionOrder.length} questions inside it.
@@ -142,7 +139,6 @@ const SubTopicItem = ({ id, overlay = false }) => {
         </div>
       </Modal>
 
-      {/* 3. Add Question Modal */}
       <Modal isOpen={isAddQuestionModalOpen} onClose={() => setIsAddQuestionModalOpen(false)} title="Add New Question">
         <form onSubmit={handleAddQuestion} className="flex flex-col gap-3">
           <input 

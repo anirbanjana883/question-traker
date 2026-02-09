@@ -15,13 +15,11 @@ const SearchResults = () => {
   const topics = useSheetStore(state => state.topics);
   const sheet = useSheetStore(state => state.sheet);
 
-  // --- LOGIC: Flatten and Filter ---
-  // We need to find the Question -> SubTopic -> Topic relationship
+
   
   const results = [];
   const lowerQuery = searchQuery.toLowerCase();
 
-  // Iterate through the hierarchy to maintain order, but flatten it
   sheet.topicOrder.forEach(topicId => {
     const topic = topics[topicId];
     if (!topic) return;
@@ -34,7 +32,6 @@ const SearchResults = () => {
         const q = questions[qId];
         if (!q) return;
 
-        // Check Match
         const matchTitle = q.title.toLowerCase().includes(lowerQuery);
         const matchDiff = q.difficulty?.toLowerCase().includes(lowerQuery);
         
@@ -68,7 +65,6 @@ const SearchResults = () => {
         {results.map((q) => (
           <div key={q.id} className="p-4 hover:bg-white/5 transition flex items-center justify-between group">
             
-            {/* Left: Path & Title */}
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2 text-xs text-tuf-muted mb-1">
                 <span>{q.topicName}</span>
@@ -87,7 +83,6 @@ const SearchResults = () => {
               </a>
             </div>
 
-            {/* Right: Difficulty Badge */}
             <span className={`text-xs px-3 py-1 rounded-full border ${difficultyColors[q.difficulty] || difficultyColors.Medium}`}>
               {q.difficulty}
             </span>

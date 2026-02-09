@@ -1,40 +1,41 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useSheetStore } from './store/useSheetStore';
-import { 
-  DndContext, 
-  KeyboardSensor, 
-  PointerSensor, 
-  useSensor, 
-  useSensors, 
-  pointerWithin, 
-  DragOverlay, 
-  MeasuringStrategy 
-} from '@dnd-kit/core';
-import { 
-  SortableContext, 
-  sortableKeyboardCoordinates, 
-  verticalListSortingStrategy 
-} from '@dnd-kit/sortable';
-import TopicItem from './components/TopicItem';
-import SubTopicItem from './components/SubTopicItem';
-import QuestionItem from './components/QuestionItem';
-import SearchBar from './components/SearchBar';
-import SearchResults from './components/SearchResults';
-import Modal from './components/Modal'; 
-import { Plus, RotateCcw } from 'lucide-react';
+import React, { useEffect, useState, useCallback } from "react";
+import { useSheetStore } from "./store/useSheetStore";
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  pointerWithin,
+  DragOverlay,
+  MeasuringStrategy,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import TopicItem from "./components/TopicItem";
+import SubTopicItem from "./components/SubTopicItem";
+import QuestionItem from "./components/QuestionItem";
+import SearchBar from "./components/SearchBar";
+import SearchResults from "./components/SearchResults";
+import Modal from "./components/Modal";
+import { Plus, RotateCcw } from "lucide-react";
 
 function App() {
-  const { sheet, fetchSheet, addTopic, reorderItem, searchQuery, resetSheet } = useSheetStore();
-  
+  const { sheet, fetchSheet, addTopic, reorderItem, searchQuery, resetSheet } =
+    useSheetStore();
+
   // Drag State
   const [activeId, setActiveId] = useState(null);
-  
+
   // Modal States
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false); // <--- New State
-  
+
   // Form State
-  const [newTopicTitle, setNewTopicTitle] = useState(''); // <--- New State
+  const [newTopicTitle, setNewTopicTitle] = useState(""); // <--- New State
 
   useEffect(() => {
     fetchSheet();
@@ -42,7 +43,9 @@ function App() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
 
   const handleDragStart = useCallback((event) => {
@@ -65,7 +68,7 @@ function App() {
     let sourceIndex = -1;
     let destIndex = -1;
 
-    // Detect Type & Calculate Indexes
+
     if (activeId.toString().startsWith("topic-")) {
       type = "topic";
       sourceIndex = state.sheet.topicOrder.indexOf(activeId);
@@ -77,7 +80,8 @@ function App() {
         if (t.subTopicOrder.includes(overId)) destParentId = t.id;
       });
       if (sourceParentId && destParentId) {
-        sourceIndex = state.topics[sourceParentId].subTopicOrder.indexOf(activeId);
+        sourceIndex =
+          state.topics[sourceParentId].subTopicOrder.indexOf(activeId);
         destIndex = state.topics[destParentId].subTopicOrder.indexOf(overId);
       }
     } else if (activeId.toString().startsWith("q-")) {
@@ -87,7 +91,8 @@ function App() {
         if (st.questionOrder.includes(overId)) destParentId = st.id;
       });
       if (sourceParentId && destParentId) {
-        sourceIndex = state.subTopics[sourceParentId].questionOrder.indexOf(activeId);
+        sourceIndex =
+          state.subTopics[sourceParentId].questionOrder.indexOf(activeId);
         destIndex = state.subTopics[destParentId].questionOrder.indexOf(overId);
       }
     }
@@ -95,7 +100,7 @@ function App() {
     if (type && sourceIndex !== -1 && destIndex !== -1) {
       reorderItem(type, sourceParentId, destParentId, sourceIndex, destIndex);
     }
-  }, []); 
+  }, []);
 
   // --- HANDLERS ---
 
@@ -103,7 +108,7 @@ function App() {
     e.preventDefault();
     if (newTopicTitle.trim()) {
       addTopic(newTopicTitle);
-      setNewTopicTitle('');
+      setNewTopicTitle("");
       setIsAddTopicModalOpen(false);
     }
   };
@@ -136,29 +141,28 @@ function App() {
                 {sheet.title || "My Sheet"}
               </h1>
               <p className="text-tuf-muted text-sm mt-1">
-                Striver SDE Sheet Clone
+                Interactive interview preparation sheets
               </p>
             </div>
-            
+
             {!isSearching && (
               <div className="flex gap-2">
-                 {/* RESET BUTTON */}
-                 <button 
-                   onClick={() => setIsResetModalOpen(true)}
-                   className="bg-tuf-card border border-tuf-border hover:bg-[#252525] text-tuf-muted hover:text-white px-3 py-2 rounded-md font-medium flex items-center gap-2 transition"
-                   title="Reset to Default"
-                 >
-                   <RotateCcw size={18} />
-                 </button>
+                {/* RESET BUTTON */}
+                <button
+                  onClick={() => setIsResetModalOpen(true)}
+                  className="bg-tuf-card border border-tuf-border hover:bg-[#252525] text-tuf-muted hover:text-white px-3 py-2 rounded-md font-medium flex items-center gap-2 transition"
+                  title="Reset to Default"
+                >
+                  <RotateCcw size={18} />
+                </button>
 
-                 {/* ADD TOPIC BUTTON (Now opens Modal) */}
-                 <button 
-                   onClick={() => setIsAddTopicModalOpen(true)} 
-                   className="bg-tuf-red hover:bg-tuf-hover text-white px-4 py-2 rounded-md font-medium flex items-center gap-2 transition"
-                 >
-                   <Plus size={20} /> Add Topic
-                 </button>
-               </div>
+                <button
+                  onClick={() => setIsAddTopicModalOpen(true)}
+                  className="bg-tuf-red hover:bg-tuf-hover text-white px-4 py-2 rounded-md font-medium flex items-center gap-2 transition"
+                >
+                  <Plus size={20} /> Add Topic
+                </button>
+              </div>
             )}
           </div>
           <SearchBar />
@@ -196,9 +200,7 @@ function App() {
               }}
             >
               {activeId ? (
-                <div className="w-full max-w-4xl">
-                  {renderOverlayItem()}
-                </div>
+                <div className="w-full max-w-4xl">{renderOverlayItem()}</div>
               ) : null}
             </DragOverlay>
           </DndContext>
@@ -206,24 +208,43 @@ function App() {
       </div>
 
       {/* --- MODALS --- */}
-
-      {/* 1. Reset Modal */}
-      <Modal isOpen={isResetModalOpen} onClose={() => setIsResetModalOpen(false)} title="Reset Sheet?">
+      <Modal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        title="Reset Sheet?"
+      >
         <p className="text-tuf-muted mb-6">
-          Are you sure you want to reset everything? This will <strong>delete all your custom changes</strong> and restore the original Striver SDE Sheet.
+          Are you sure you want to reset everything? This will{" "}
+          <strong>delete all your custom changes</strong> and restore the
+          original Striver SDE Sheet.
         </p>
         <div className="flex justify-end gap-2">
-          <button onClick={() => setIsResetModalOpen(false)} className="px-4 py-2 text-sm text-tuf-muted hover:text-white">Cancel</button>
-          <button onClick={handleReset} className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 font-medium">Yes, Reset Everything</button>
+          <button
+            onClick={() => setIsResetModalOpen(false)}
+            className="px-4 py-2 text-sm text-tuf-muted hover:text-white"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleReset}
+            className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 font-medium"
+          >
+            Yes, Reset Everything
+          </button>
         </div>
       </Modal>
 
-      {/* 2. Add Topic Modal */}
-      <Modal isOpen={isAddTopicModalOpen} onClose={() => setIsAddTopicModalOpen(false)} title="Create New Topic">
+      <Modal
+        isOpen={isAddTopicModalOpen}
+        onClose={() => setIsAddTopicModalOpen(false)}
+        title="Create New Topic"
+      >
         <form onSubmit={handleCreateTopic} className="flex flex-col gap-4">
           <div>
-            <label className="text-xs text-tuf-muted uppercase mb-1 block">Topic Name</label>
-            <input 
+            <label className="text-xs text-tuf-muted uppercase mb-1 block">
+              Topic Name
+            </label>
+            <input
               autoFocus
               className="w-full bg-black border border-tuf-border text-white px-3 py-2 rounded focus:border-tuf-red outline-none"
               value={newTopicTitle}
@@ -232,12 +253,22 @@ function App() {
             />
           </div>
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => setIsAddTopicModalOpen(false)} className="px-4 py-2 text-sm text-tuf-muted hover:text-white">Cancel</button>
-            <button type="submit" className="px-4 py-2 text-sm bg-tuf-red text-white rounded hover:bg-tuf-hover font-medium">Create Topic</button>
+            <button
+              type="button"
+              onClick={() => setIsAddTopicModalOpen(false)}
+              className="px-4 py-2 text-sm text-tuf-muted hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm bg-tuf-red text-white rounded hover:bg-tuf-hover font-medium"
+            >
+              Create Topic
+            </button>
           </div>
         </form>
       </Modal>
-
     </div>
   );
 }
