@@ -6,6 +6,12 @@ It provides a clean, intuitive single-page experience for managing large intervi
 
 ---
 
+> **⚠️ DEMO NOTICE:**
+> This application uses a **file-system based JSON store** for simplicity and portability.
+> On free hosting platforms (like Render/Vercel), the file system is ephemeral.
+> **Your data will reset to the original state periodically (approx. every 24 hours).**
+> For permanent storage, connect a MongoDB database.
+
 ## 📋 Table of Contents
 - 🌟 Key Features  
 - 🛠 Tech Stack  
