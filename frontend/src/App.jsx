@@ -25,8 +25,16 @@ import { Plus, RotateCcw } from 'lucide-react';
 
 function App() {
   const { sheet, fetchSheet, addTopic, reorderItem, searchQuery, resetSheet } = useSheetStore();
+  
+  // Drag State
   const [activeId, setActiveId] = useState(null);
+  
+  // Modal States
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false); // <--- New State
+  
+  // Form State
+  const [newTopicTitle, setNewTopicTitle] = useState(''); // <--- New State
 
   useEffect(() => {
     fetchSheet();
@@ -89,9 +97,15 @@ function App() {
     }
   }, []); 
 
-  const handleAddTopic = () => {
-    const title = prompt("Enter Topic Name:");
-    if (title) addTopic(title);
+  // --- HANDLERS ---
+
+  const handleCreateTopic = (e) => {
+    e.preventDefault();
+    if (newTopicTitle.trim()) {
+      addTopic(newTopicTitle);
+      setNewTopicTitle('');
+      setIsAddTopicModalOpen(false);
+    }
   };
 
   const handleReset = () => {
@@ -119,11 +133,10 @@ function App() {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-3xl font-bold text-tuf-red">
-                {/* {sheet.title || "My Sheet"} */}
-                Prep Flow
+                {sheet.title || "My Sheet"}
               </h1>
               <p className="text-tuf-muted text-sm mt-1">
-                Organize, prioritize, and master your interview prep.
+                Striver SDE Sheet Clone
               </p>
             </div>
             
@@ -138,8 +151,11 @@ function App() {
                    <RotateCcw size={18} />
                  </button>
 
-                 {/* ADD TOPIC BUTTON */}
-                 <button onClick={handleAddTopic} className="bg-tuf-red hover:bg-tuf-hover text-white px-4 py-2 rounded-md font-medium flex items-center gap-2 transition">
+                 {/* ADD TOPIC BUTTON (Now opens Modal) */}
+                 <button 
+                   onClick={() => setIsAddTopicModalOpen(true)} 
+                   className="bg-tuf-red hover:bg-tuf-hover text-white px-4 py-2 rounded-md font-medium flex items-center gap-2 transition"
+                 >
                    <Plus size={20} /> Add Topic
                  </button>
                </div>
@@ -181,7 +197,6 @@ function App() {
             >
               {activeId ? (
                 <div className="w-full max-w-4xl">
-                  {/* Constrain width to match main layout */}
                   {renderOverlayItem()}
                 </div>
               ) : null}
@@ -190,7 +205,9 @@ function App() {
         )}
       </div>
 
-      {/* RESET CONFIRMATION MODAL */}
+      {/* --- MODALS --- */}
+
+      {/* 1. Reset Modal */}
       <Modal isOpen={isResetModalOpen} onClose={() => setIsResetModalOpen(false)} title="Reset Sheet?">
         <p className="text-tuf-muted mb-6">
           Are you sure you want to reset everything? This will <strong>delete all your custom changes</strong> and restore the original Striver SDE Sheet.
@@ -199,6 +216,26 @@ function App() {
           <button onClick={() => setIsResetModalOpen(false)} className="px-4 py-2 text-sm text-tuf-muted hover:text-white">Cancel</button>
           <button onClick={handleReset} className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 font-medium">Yes, Reset Everything</button>
         </div>
+      </Modal>
+
+      {/* 2. Add Topic Modal */}
+      <Modal isOpen={isAddTopicModalOpen} onClose={() => setIsAddTopicModalOpen(false)} title="Create New Topic">
+        <form onSubmit={handleCreateTopic} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs text-tuf-muted uppercase mb-1 block">Topic Name</label>
+            <input 
+              autoFocus
+              className="w-full bg-black border border-tuf-border text-white px-3 py-2 rounded focus:border-tuf-red outline-none"
+              value={newTopicTitle}
+              onChange={(e) => setNewTopicTitle(e.target.value)}
+              placeholder="e.g. Dynamic Programming"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={() => setIsAddTopicModalOpen(false)} className="px-4 py-2 text-sm text-tuf-muted hover:text-white">Cancel</button>
+            <button type="submit" className="px-4 py-2 text-sm bg-tuf-red text-white rounded hover:bg-tuf-hover font-medium">Create Topic</button>
+          </div>
+        </form>
       </Modal>
 
     </div>

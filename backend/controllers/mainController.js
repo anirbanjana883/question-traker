@@ -15,23 +15,41 @@ export const getSheet = (req, res) => {
 
 // adding topic , subtopic , question
 export const addItem = (req, res) => {
-  const { type, parentId, title, link, difficulty } = req.body;
+  const { type, title, parentId, link, difficulty } = req.body;
   const db = get();
-  const newId = uuidv4();
+  
+  // FIX: Force Prefixes on new IDs so Frontend Drag Logic works
+  let rawId = uuidv4();
+  let newId = rawId;
 
   if (type === 'topic') {
+    newId = `topic-${rawId}`; 
     db.topics[newId] = { id: newId, title, subTopicOrder: [] };
     db.sheet.topicOrder.push(newId);
-  } else if (type === 'subTopic') {
+  } 
+  else if (type === 'subTopic') {
+    newId = `sub-${rawId}`;   
     db.subTopics[newId] = { id: newId, title, questionOrder: [] };
-    if (db.topics[parentId]) db.topics[parentId].subTopicOrder.push(newId);
-  } else if (type === 'question') {
-    db.questions[newId] = { id: newId, title, link, difficulty, isPinned: false };
-    if (db.subTopics[parentId]) db.subTopics[parentId].questionOrder.push(newId);
+    if (db.topics[parentId]) {
+      db.topics[parentId].subTopicOrder.push(newId);
+    }
+  } 
+  else if (type === 'question') {
+    newId = `q-${rawId}`;     
+    db.questions[newId] = {
+      id: newId,
+      title,
+      link: link || '#',
+      difficulty: difficulty || 'Medium',
+      isPinned: false
+    };
+    if (db.subTopics[parentId]) {
+      db.subTopics[parentId].questionOrder.push(newId);
+    }
   }
 
   save();
-  res.json({ success: true, id: newId });
+  res.json({ success: true, id: newId, message: "Item added" });
 };
 
 // editing Topic , SubTopic , Question
