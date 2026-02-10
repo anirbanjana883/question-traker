@@ -43,7 +43,7 @@ function App() {
       await toast.promise(
         fetchSheet(),
         {
-          loading: 'Waking up server... (This may take ~50s on free hosting)',
+          loading: 'Waking up server... if not done automatically try refreshing on the refresh button provided',
           success: <b>Connected! Data loaded.</b>,
           error: <b>Server connection failed.</b>,
         },
