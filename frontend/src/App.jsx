@@ -22,7 +22,7 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Modal from "./components/Modal";
 import { Plus, RotateCcw } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast"; // Imported correctly
 
 function App() {
   const { sheet, fetchSheet, addTopic, reorderItem, searchQuery, resetSheet } =
@@ -33,12 +33,12 @@ function App() {
 
   // Modal States
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false); // <--- New State
+  const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false);
 
   // Form State
-  const [newTopicTitle, setNewTopicTitle] = useState(""); // <--- New State
+  const [newTopicTitle, setNewTopicTitle] = useState("");
 
-useEffect(() => {
+  useEffect(() => {
     const init = async () => {
       await toast.promise(
         fetchSheet(),
@@ -54,7 +54,7 @@ useEffect(() => {
             color: '#fff',
             border: '1px solid #374151',
           },
-          loading: { duration: Infinity },
+          loading: { duration: 3000 },
         }
       );
     };
@@ -159,6 +159,26 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-tuf-black p-8 flex flex-col items-center">
+      <Toaster 
+        position="bottom-right"
+        containerStyle={{
+          zIndex: 99999, 
+        }}
+        toastOptions={{
+          style: {
+            background: '#333',
+            color: '#fff',
+            border: '1px solid #374151',
+          },
+          success: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+
       <div className="w-full max-w-4xl">
         <header className="flex flex-col mb-8 border-b border-tuf-border pb-6">
           <div className="flex justify-between items-center mb-6">
@@ -173,7 +193,6 @@ useEffect(() => {
 
             {!isSearching && (
               <div className="flex gap-2">
-                {/* RESET BUTTON */}
                 <button
                   onClick={() => setIsResetModalOpen(true)}
                   className="bg-tuf-card border border-tuf-border hover:bg-[#252525] text-tuf-muted hover:text-white px-3 py-2 rounded-md font-medium flex items-center gap-2 transition"
