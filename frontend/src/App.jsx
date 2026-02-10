@@ -22,6 +22,7 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Modal from "./components/Modal";
 import { Plus, RotateCcw } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
   const { sheet, fetchSheet, addTopic, reorderItem, searchQuery, resetSheet } =
@@ -37,8 +38,27 @@ function App() {
   // Form State
   const [newTopicTitle, setNewTopicTitle] = useState(""); // <--- New State
 
-  useEffect(() => {
-    fetchSheet();
+useEffect(() => {
+    const init = async () => {
+      await toast.promise(
+        fetchSheet(),
+        {
+          loading: 'Waking up server... (This may take ~50s on free hosting)',
+          success: <b>Connected! Data loaded.</b>,
+          error: <b>Server connection failed.</b>,
+        },
+        {
+          style: {
+            minWidth: '250px',
+            background: '#333',
+            color: '#fff',
+            border: '1px solid #374151',
+          },
+          loading: { duration: Infinity },
+        }
+      );
+    };
+    init();
   }, []);
 
   const sensors = useSensors(
@@ -67,7 +87,6 @@ function App() {
     let destParentId = null;
     let sourceIndex = -1;
     let destIndex = -1;
-
 
     if (activeId.toString().startsWith("topic-")) {
       type = "topic";
@@ -102,19 +121,26 @@ function App() {
     }
   }, []);
 
-  // --- HANDLERS ---
 
-  const handleCreateTopic = (e) => {
+  const handleCreateTopic = async (e) => {
     e.preventDefault();
     if (newTopicTitle.trim()) {
-      addTopic(newTopicTitle);
+      await toast.promise(addTopic(newTopicTitle), {
+        loading: "Creating topic...",
+        success: "Topic created successfully!",
+        error: "Failed to create topic",
+      });
       setNewTopicTitle("");
       setIsAddTopicModalOpen(false);
     }
   };
 
-  const handleReset = () => {
-    resetSheet();
+  const handleReset = async () => {
+    await toast.promise(resetSheet(), {
+      loading: "Resetting database...",
+      success: "Factory reset complete!",
+      error: "Reset failed",
+    });
     setIsResetModalOpen(false);
   };
 
@@ -207,7 +233,6 @@ function App() {
         )}
       </div>
 
-      {/* --- MODALS --- */}
       <Modal
         isOpen={isResetModalOpen}
         onClose={() => setIsResetModalOpen(false)}

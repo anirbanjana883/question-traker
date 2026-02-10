@@ -4,7 +4,8 @@ import { useSortableItem } from '../hooks/useSortableItem';
 import { GripVertical, Trash2, Edit2, Plus, ChevronDown, ChevronRight } from 'lucide-react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import SubTopicItem from './SubTopicItem';
-import Modal from './Modal'; // <--- Import Modal
+import Modal from './Modal'; 
+import toast from 'react-hot-toast'; 
 
 const TopicItem = ({ id, overlay = false }) => {
   const topic = useSheetStore(state => state.topics[id]);
@@ -22,21 +23,24 @@ const TopicItem = ({ id, overlay = false }) => {
   const [newSubTopicTitle, setNewSubTopicTitle] = useState('');
 
   const { attributes, listeners, setNodeRef, style, isDragging } = overlay 
-     ? { attributes: {}, listeners: {}, setNodeRef: null, style: {}, isDragging: false }
-     : useSortableItem(id, false); // Removed isEditing check since we use modals now
+      ? { attributes: {}, listeners: {}, setNodeRef: null, style: {}, isDragging: false }
+      : useSortableItem(id, false);
 
   if (!topic) return null;
+
 
   const handleUpdate = (e) => {
     e.preventDefault();
     if (editTitle.trim()) {
       updateItem('topic', id, { title: editTitle });
+      toast.success("Topic updated"); 
       setIsEditModalOpen(false);
     }
   };
 
   const handleDelete = () => {
     deleteItem('topic', id);
+    toast.success("Topic deleted"); 
     setIsDeleteModalOpen(false);
   };
 
@@ -44,8 +48,11 @@ const TopicItem = ({ id, overlay = false }) => {
     e.preventDefault();
     if (newSubTopicTitle.trim()) {
       addSubTopic(id, newSubTopicTitle);
+      toast.success("Sub-Topic created successfully!"); 
       setNewSubTopicTitle('');
       setIsAddSubModalOpen(false);
+      // Auto-expand to show new item
+      if (!isExpanded) setIsExpanded(true);
     }
   };
 
@@ -60,14 +67,16 @@ const TopicItem = ({ id, overlay = false }) => {
         `}
       >
         <div className="flex items-center p-3 hover:bg-[#252525] transition-colors rounded-t-lg group">
-          <div 
-            {...attributes} 
-            {...listeners} 
-            className="cursor-grab p-1 text-tuf-muted hover:text-white flex items-center justify-center"
-            style={{ touchAction: 'none' }}
-          >
-            <GripVertical size={20} />
-          </div>
+          {!overlay && (
+            <div 
+              {...attributes} 
+              {...listeners} 
+              className="cursor-grab p-1 text-tuf-muted hover:text-white flex items-center justify-center"
+              style={{ touchAction: 'none' }}
+            >
+              <GripVertical size={20} />
+            </div>
+          )}
           
           <button onClick={() => setIsExpanded(!isExpanded)} className="mr-2 text-tuf-red">
             {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -116,7 +125,6 @@ const TopicItem = ({ id, overlay = false }) => {
         )}
       </div>
 
-      {/* --- MODALS --- */}
       
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Rename Topic">
         <form onSubmit={handleUpdate} className="flex flex-col gap-4">

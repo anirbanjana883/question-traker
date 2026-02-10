@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useSheetStore } from '../store/useSheetStore';
 import { useSortableItem } from '../hooks/useSortableItem';
 import { GripVertical, Trash2, ExternalLink, Pin, PinOff, Edit2 } from 'lucide-react';
-import Modal from './Modal'; // <--- Import Modal
+import Modal from './Modal'; 
+import toast from 'react-hot-toast';
 
 const difficultyColors = {
   Easy: 'text-green-400 bg-green-400/10 border-green-400/20',
@@ -27,6 +28,7 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
 
   if (!question) return null;
 
+
   const handleEditClick = () => {
     setEditForm({ 
       title: question.title, 
@@ -44,13 +46,24 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
         link: editForm.link,
         difficulty: editForm.difficulty
       });
+      toast.success('Question updated!');
       setIsEditModalOpen(false);
     }
   };
 
   const handleDelete = () => {
     deleteItem('question', id);
+    toast.success('Question deleted');
     setIsDeleteModalOpen(false);
+  };
+
+  const handleTogglePin = () => {
+    togglePin(id);
+    if (question.isPinned) {
+      toast('Question unpinned', { icon: '📌' });
+    } else {
+      toast.success('Question pinned to top!', { icon: '📌' });
+    }
   };
 
   const difficultyClass = difficultyColors[question.difficulty] || difficultyColors.Medium;
@@ -68,7 +81,6 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
         `}
       >
         <div className="flex items-center gap-3 overflow-hidden">
-          {/* Drag Handle */}
           {!isPinnedSection && (
             <div 
               {...attributes} 
@@ -80,7 +92,6 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
             </div>
           )}
           
-          {/* Title & Link */}
           <div className="flex flex-col truncate">
             <a 
               href={question.link} 
@@ -95,7 +106,6 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
           </div>
         </div>
 
-        {/* Right Side Actions */}
         <div className="flex items-center gap-3 shrink-0">
           <span className={`text-xs px-2 py-0.5 rounded border ${difficultyClass}`}>
             {question.difficulty}
@@ -112,7 +122,7 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
               </button>
 
               <button 
-                onClick={() => togglePin(id)} 
+                onClick={handleTogglePin} 
                 className={`p-1.5 rounded hover:bg-white/10 ${question.isPinned ? 'text-tuf-red' : 'text-gray-400'}`}
                 title={question.isPinned ? "Unpin" : "Pin to top"}
               >
@@ -131,9 +141,6 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
         </div>
       </div>
 
-      {/* --- MODALS --- */}
-
-      {/* 1. Edit Question Modal */}
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Question">
         <form onSubmit={handleSave} className="flex flex-col gap-4">
           <div>
@@ -177,7 +184,6 @@ const QuestionItem = ({ id, isPinnedSection = false, overlay = false }) => {
         </form>
       </Modal>
 
-      {/* 2. Delete Confirmation Modal */}
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Question?">
         <p className="text-tuf-muted mb-6">
           Are you sure you want to delete <strong>"{question.title}"</strong>? This action cannot be undone.
